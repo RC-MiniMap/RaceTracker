@@ -96,3 +96,7 @@ Open `http://localhost:5173` in your browser. The Vite proxy forwards `/api/*` c
 - FastF1 cache lives in `fastf1_cache/` (gitignored) — don't delete it, it saves download time
 - Driver headshot images come from OpenF1 API, not FastF1
 - React fetches all lap data in one request at race load time, then steps through it client-side with a timer
+
+---
+
+

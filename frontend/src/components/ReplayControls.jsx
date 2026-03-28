@@ -36,7 +36,7 @@ function ReplayControls({ currentLap, lapCount, lapNumber, totalLaps, isPlaying,
         disabled={lapCount === 0}
       >
         {speedOptions.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <option key={`${opt.label}-${opt.value}`} value={opt.value}>{opt.label}</option>
         ))}
       </select>
     </div>
