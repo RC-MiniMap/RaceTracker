@@ -12,7 +12,21 @@ function useRaceData(year, round) {
     setError(null)
 
     fetch(`/api/race/${year}/${round}/laps`)
-      .then(res => res.json())
+      .then(async res => {
+        if (!res.ok) {
+          let errorMessage = `Request failed with status ${res.status}`
+          try {
+            const errorData = await res.json()
+            if (errorData && typeof errorData.message === 'string') {
+              errorMessage = errorData.message
+            }
+          } catch (e) {
+            // Ignore JSON parse errors and fall back to generic message
+          }
+          throw new Error(errorMessage)
+        }
+        return res.json()
+      })
       .then(data => {
         setRaceData(data)
         setLoading(false)
