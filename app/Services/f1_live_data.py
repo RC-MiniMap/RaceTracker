@@ -3,12 +3,6 @@
 Primary functions:
   - get_available_races(year) -> list[dict]
   - get_race_lap_data(year, round_number) -> dict
-
-Legacy Ergast client also available for fallback/CLI use.
-
-Usage examples:
-  python -m app.Services.f1_replay_data schedule
-  python -m app.Services.f1_replay_data last-results --refresh
 """
 
 from __future__ import annotations
