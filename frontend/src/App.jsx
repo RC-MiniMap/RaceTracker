@@ -4,6 +4,7 @@ import RaceSelector from './components/RaceSelector'
 import Leaderboard from './components/Leaderboard'
 import ReplayControls from './components/ReplayControls'
 import useRaceData from './hooks/useRaceData'
+import useDriverRatings from './hooks/useDriverRatings'
 
 const STUB_STANDINGS = [
   { position: 1, driver_name: 'Max Verstappen', abbreviation: 'VER', driver_number: 1, team: 'Red Bull Racing', lap_time: '1:34.523', headshot_url: '' },
@@ -34,6 +35,9 @@ function App() {
   const standings = currentLapData?.standings ?? STUB_STANDINGS
   const totalLaps = raceData?.total_laps ?? '—'
   const lapNumber = currentLapData?.lap_number ?? currentLap + 1
+
+  // Fetch driver ratings for the current lap
+  const { ratings } = useDriverRatings(selectedYear, selectedRound, lapNumber)
 
   const avgLapTimeMs = raceData ? (() => {
     const times = raceData.laps.flatMap(lap =>
@@ -123,6 +127,7 @@ function App() {
           loading={loading}
           raceData={raceData}
           currentLapIndex={currentLap}
+          ratings={ratings}
         />
       </div>
 

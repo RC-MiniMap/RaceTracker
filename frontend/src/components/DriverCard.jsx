@@ -1,6 +1,14 @@
 import { getTeamColor } from '../utils/teamColors'
 
-function DriverCard({ position, driver_name, abbreviation, driver_number, team, lap_time, headshot_url, positionChange }) {
+function getRatingColor(rating) {
+  if (rating >= 8.0) return '#4ade80'  // green — excellent
+  if (rating >= 7.0) return '#a3e635'  // lime — good
+  if (rating >= 6.0) return '#facc15'  // yellow — average
+  if (rating >= 5.0) return '#fb923c'  // orange — below average
+  return '#ef4444'                      // red — poor
+}
+
+function DriverCard({ position, driver_name, abbreviation, driver_number, team, lap_time, headshot_url, positionChange, rating }) {
   const teamColor = getTeamColor(team)
 
   return (
@@ -49,6 +57,32 @@ function DriverCard({ position, driver_name, abbreviation, driver_number, team, 
       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text)', textAlign: 'right', width: '80px', fontVariantNumeric: 'tabular-nums' }}>
         {lap_time}
       </span>
+
+      {rating != null ? (
+        <div style={{
+          width: '52px',
+          textAlign: 'center',
+          marginLeft: '8px',
+        }}>
+          <span style={{
+            display: 'inline-block',
+            minWidth: '36px',
+            padding: '2px 6px',
+            borderRadius: '4px',
+            fontSize: '13px',
+            fontWeight: 700,
+            fontFamily: 'var(--font-mono)',
+            fontVariantNumeric: 'tabular-nums',
+            color: '#111',
+            background: getRatingColor(rating.overall_rating),
+            opacity: rating.is_provisional ? 0.6 : 1,
+          }}>
+            {rating.overall_rating.toFixed(1)}
+          </span>
+        </div>
+      ) : (
+        <div style={{ width: '52px', marginLeft: '8px' }} />
+      )}
     </div>
   )
 }
