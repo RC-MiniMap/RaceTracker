@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import RaceSelector from './components/RaceSelector'
 import Leaderboard from './components/Leaderboard'
@@ -14,12 +14,56 @@ const STUB_STANDINGS = [
 ]
 
 function App() {
-  const [currentLap] = useState(0)
+  const [currentLap, setCurrentLap] = useState(0)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [replayInterval, setReplayInterval] = useState(5000)
+  const intervalRef = useRef(null)
   const { raceData, loading } = useRaceData(2024, 1)
 
+  const lapCount = raceData?.laps?.length ?? 0
   const standings = raceData?.laps[currentLap]?.standings ?? STUB_STANDINGS
   const totalLaps = raceData?.total_laps ?? '—'
   const lapNumber = raceData?.laps[currentLap]?.lap_number ?? currentLap + 1
+
+  const avgLapTimeMs = raceData ? (() => {
+    const times = raceData.laps.flatMap(lap =>
+      lap.standings
+        .filter(s => s.position === 1 && s.lap_time)
+        .map(s => {
+          const [mins, secs] = s.lap_time.split(':')
+          return Number(mins) * 60000 + Number(secs) * 1000
+        })
+    ).filter(t => !isNaN(t))
+    return times.length ? Math.round(times.reduce((a, b) => a + b, 0) / times.length) : null
+  })() : null
+
+  useEffect(() => {
+    if (!isPlaying) return
+
+    intervalRef.current = setInterval(() => {
+      setCurrentLap(prev => {
+        const next = prev + 1
+        if (next >= lapCount - 1) {
+          clearInterval(intervalRef.current)
+          setIsPlaying(false)
+          return lapCount - 1
+        }
+        return next
+      })
+    }, replayInterval)
+
+    return () => clearInterval(intervalRef.current)
+  }, [isPlaying, lapCount, replayInterval])
+
+  const handlePlayPause = () => {
+    if (!raceData) return
+    setIsPlaying(prev => !prev)
+  }
+
+  const handleScrub = (lapIndex) => {
+    setCurrentLap(lapIndex)
+    setIsPlaying(false)
+  }
 
   return (
     <div>
@@ -30,7 +74,18 @@ function App() {
         totalLaps={totalLaps}
         loading={loading}
       />
-      <ReplayControls />
+      <ReplayControls
+        currentLap={currentLap}
+        lapCount={lapCount}
+        lapNumber={lapNumber}
+        totalLaps={totalLaps}
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onScrub={handleScrub}
+        interval={replayInterval}
+        onIntervalChange={setReplayInterval}
+        avgLapTimeMs={avgLapTimeMs}
+      />
     </div>
   )
 }
