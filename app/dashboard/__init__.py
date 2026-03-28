@@ -1,1 +1,1 @@
-placeholder
+"""Dashboard module for RaceTracker."""

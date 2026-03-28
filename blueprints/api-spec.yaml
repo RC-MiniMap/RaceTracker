@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: RaceTracker API
+  version: 0.1.0
+  description: OpenAPI spec skeleton for RaceTracker (MVP endpoints)
+
+servers:
+  - url: https://api.racetracker.example.com/v1
+
+paths:
+  /races:
+    get:
+      summary: List races
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create a race
+      requestBody:
+        required: true
+      responses:
+        '201':
+          description: Created
+
+  /races/{race_id}:
+    get:
+      summary: Get race
+      parameters:
+        - name: race_id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: OK
+
+  /races/{race_id}/participants:
+    post:
+      summary: Register a participant
+      requestBody:
+        required: true
+      responses:
+        '201':
+          description: Created
+
+  /races/{race_id}/telemetry:
+    post:
+      summary: Ingest telemetry (batch)
+      description: "Accepts array of telemetry points. For realtime low-latency, use WebSocket endpoint `/ws/telemetry`."
+      requestBody:
+        required: true
+      responses:
+        '202':
+          description: Accepted
+
+components:
+  schemas:
+    Race:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string

@@ -1,0 +1,15 @@
+Wireframes (text descriptions)
+
+1) Dashboard
+- Top nav: Race selector, live toggle, user menu
+- Left: leaderboard with sortable columns (rank, bib, name, time, delta)
+- Center: large live map with participant markers and trail
+- Right: selected participant detail (speed, last checkpoint, lap times)
+
+2) Participant view
+- Header with race and bib
+- Map centered on participant, minimal UI
+- Buttons: Share, Report issue
+
+3) Race setup/admin
+- Form to create race, upload course (GPX/geojson), set checkpoints and detection radii
