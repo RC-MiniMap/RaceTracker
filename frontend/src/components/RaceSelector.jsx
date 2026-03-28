@@ -13,7 +13,13 @@ function RaceSelector({ onRaceSelect }) {
         setRaces(data)
         setLoading(false)
         if (data.length > 0) {
-          const latest = data[data.length - 1]
+          // Default to latest past race (future races have no lap data)
+          const today = new Date()
+          const pastRaces = data.filter(race => {
+            if (!race.date) return true
+            return new Date(race.date) <= today
+          })
+          const latest = pastRaces.length > 0 ? pastRaces[pastRaces.length - 1] : data[data.length - 1]
           const value = `${latest.year}-${latest.round}`
           setSelectedValue(value)
           onRaceSelect(latest.year, latest.round)
