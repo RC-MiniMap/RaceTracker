@@ -37,6 +37,7 @@ ENV/
 fastf1_cache/
 data/
 
+
 # OS
 .DS_Store
 Thumbs.db
