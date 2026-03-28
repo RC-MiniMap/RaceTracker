@@ -14,11 +14,20 @@ const STUB_STANDINGS = [
 ]
 
 function App() {
+  const [selectedYear, setSelectedYear] = useState(null)
+  const [selectedRound, setSelectedRound] = useState(null)
   const [currentLap, setCurrentLap] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [replayInterval, setReplayInterval] = useState(5000)
   const intervalRef = useRef(null)
-  const { raceData, loading } = useRaceData(2024, 1)
+  const { raceData, loading } = useRaceData(selectedYear, selectedRound)
+
+  const handleRaceSelect = (year, round) => {
+    setSelectedYear(year)
+    setSelectedRound(round)
+    setCurrentLap(0)
+    setIsPlaying(false)
+  }
 
   const lapCount = raceData?.laps?.length ?? 0
   const currentLapData = raceData?.laps?.[currentLap]
@@ -92,7 +101,7 @@ function App() {
 
   return (
     <div>
-      <RaceSelector />
+      <RaceSelector onRaceSelect={handleRaceSelect} />
       <Leaderboard
         standings={standings}
         currentLap={lapNumber}
