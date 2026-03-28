@@ -32,7 +32,20 @@ function RaceSelector({ onRaceSelect }) {
   if (races.length === 0) return <div>No races available</div>
 
   return (
-    <select value={selectedValue} onChange={handleChange}>
+    <select
+      value={selectedValue}
+      onChange={handleChange}
+      style={{
+        appearance: 'none',
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+        color: 'var(--text-bright)',
+        padding: '6px 12px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontSize: '13px',
+      }}
+    >
       {races.map(race => (
         <option key={`${race.year}-${race.round}`} value={`${race.year}-${race.round}`}>
           {race.year} {race.name}

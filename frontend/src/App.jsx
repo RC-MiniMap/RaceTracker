@@ -100,26 +100,46 @@ function App() {
   }
 
   return (
-    <div>
-      <RaceSelector onRaceSelect={handleRaceSelect} />
-      <Leaderboard
-        standings={standings}
-        currentLap={lapNumber}
-        totalLaps={totalLaps}
-        loading={loading}
-      />
-      <ReplayControls
-        currentLap={currentLap}
-        lapCount={lapCount}
-        lapNumber={lapNumber}
-        totalLaps={totalLaps}
-        isPlaying={isPlaying}
-        onPlayPause={handlePlayPause}
-        onScrub={handleScrub}
-        interval={replayInterval}
-        onIntervalChange={setReplayInterval}
-        avgLapTimeMs={avgLapTimeMs}
-      />
+    <div className="app">
+      <header className="header">
+        <div className="headerLeft">
+          <h1 className="headerTitle">RaceTracker</h1>
+          <div className="headerRaceInfo">
+            <span className="raceName">{raceData?.race_name || 'Select a race'}</span>
+            <span className="lapBadge">LAP {lapNumber}/{totalLaps}</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+          <RaceSelector onRaceSelect={handleRaceSelect} />
+          <div className="replayBadge">REPLAY</div>
+        </div>
+      </header>
+
+      <div className="leaderboardContainer">
+        <Leaderboard
+          standings={standings}
+          currentLap={lapNumber}
+          totalLaps={totalLaps}
+          loading={loading}
+          raceData={raceData}
+          currentLapIndex={currentLap}
+        />
+      </div>
+
+      <div className="controlsBar">
+        <ReplayControls
+          currentLap={currentLap}
+          lapCount={lapCount}
+          lapNumber={lapNumber}
+          totalLaps={totalLaps}
+          isPlaying={isPlaying}
+          onPlayPause={handlePlayPause}
+          onScrub={handleScrub}
+          interval={replayInterval}
+          onIntervalChange={setReplayInterval}
+          avgLapTimeMs={avgLapTimeMs}
+        />
+      </div>
     </div>
   )
 }
