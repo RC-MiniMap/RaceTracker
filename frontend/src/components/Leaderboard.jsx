@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import DriverCard from './DriverCard'
 
 function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData, currentLapIndex, ratings }) {
+  const [expandedDriver, setExpandedDriver] = useState(null)
+
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -21,6 +24,10 @@ function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData,
   previousStandings.forEach(driver => {
     positionMap[driver.driver_number] = driver.position
   })
+
+  const handleRatingClick = (abbreviation) => {
+    setExpandedDriver(prev => prev === abbreviation ? null : abbreviation)
+  }
 
   return (
     <div>
@@ -51,6 +58,8 @@ function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData,
               {...driver}
               positionChange={positionChange}
               rating={driverRating}
+              expanded={expandedDriver === driver.abbreviation}
+              onRatingClick={handleRatingClick}
             />
           )
         })}
