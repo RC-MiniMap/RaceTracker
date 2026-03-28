@@ -1,10 +1,14 @@
 from flask import Flask
 
+
 def create_app():
-  app = Flask(__name__)
+    app = Flask(__name__)
 
-  #import routes
-  from .dashboard.routes import main
-  app.register_blueprint(main)
+    # Register blueprints
+    from .dashboard.routes import main
+    from .api.routes import api
 
-  return app
+    app.register_blueprint(main)
+    app.register_blueprint(api)
+
+    return app
