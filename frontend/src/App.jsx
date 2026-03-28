@@ -21,9 +21,10 @@ function App() {
   const { raceData, loading } = useRaceData(2024, 1)
 
   const lapCount = raceData?.laps?.length ?? 0
-  const standings = raceData?.laps[currentLap]?.standings ?? STUB_STANDINGS
+  const currentLapData = raceData?.laps?.[currentLap]
+  const standings = currentLapData?.standings ?? STUB_STANDINGS
   const totalLaps = raceData?.total_laps ?? '—'
-  const lapNumber = raceData?.laps[currentLap]?.lap_number ?? currentLap + 1
+  const lapNumber = currentLapData?.lap_number ?? currentLap + 1
 
   const avgLapTimeMs = raceData ? (() => {
     const times = raceData.laps.flatMap(lap =>
