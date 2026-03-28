@@ -41,27 +41,3 @@ def get_race_laps(year, round):
     if not race_data or race_data.get("total_laps", 0) == 0:
         abort(404, description="Race not found")
     return jsonify(race_data)
-
-    # Hardcoded contract JSON example
-    return jsonify(
-        {
-            "race_name": "Bahrain Grand Prix",
-            "total_laps": 57,
-            "laps": [
-                {
-                    "lap_number": 1,
-                    "standings": [
-                        {
-                            "position": 1,
-                            "driver_name": "Max Verstappen",
-                            "abbreviation": "VER",
-                            "driver_number": 1,
-                            "team": "Red Bull Racing",
-                            "lap_time": "1:34.523",
-                            "headshot_url": "https://example.com/max.jpg",
-                        }
-                    ],
-                }
-            ],
-        }
-    )
