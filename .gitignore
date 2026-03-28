@@ -31,6 +31,7 @@ ENV/
 *.swp
 *.swo
 *~
+.vite/
 
 # F1 Data
 fastf1_cache/
