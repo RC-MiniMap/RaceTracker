@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 function RaceSelector({ onRaceSelect }) {
   const [races, setRaces] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [selectedValue, setSelectedValue] = useState('')
 
   useEffect(() => {
@@ -18,7 +19,10 @@ function RaceSelector({ onRaceSelect }) {
           onRaceSelect(latest.year, latest.round)
         }
       })
-      .catch(() => setLoading(false))
+      .catch(err => {
+        setError(err.message)
+        setLoading(false)
+      })
   }, [])
 
   const handleChange = (e) => {
@@ -29,10 +33,24 @@ function RaceSelector({ onRaceSelect }) {
   }
 
   if (loading) return <div>Loading races...</div>
+  if (error) return <div>Failed to load races: {error}</div>
   if (races.length === 0) return <div>No races available</div>
 
   return (
-    <select value={selectedValue} onChange={handleChange}>
+    <select
+      value={selectedValue}
+      onChange={handleChange}
+      style={{
+        appearance: 'none',
+        background: 'var(--bg-surface)',
+        border: '1px solid var(--border)',
+        color: 'var(--text-bright)',
+        padding: '6px 12px',
+        borderRadius: '4px',
+        cursor: 'pointer',
+        fontSize: '13px',
+      }}
+    >
       {races.map(race => (
         <option key={`${race.year}-${race.round}`} value={`${race.year}-${race.round}`}>
           {race.year} {race.name}

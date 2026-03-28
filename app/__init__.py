@@ -23,12 +23,8 @@ def create_app():
     from .dashboard.routes import main
 
     # Register api blueprint (added below)
-    try:
-        from .api.routes import api
-
-        app.register_blueprint(api, url_prefix="/api")
-    except ImportError as e:
-        print(f"API Blueprint import problem: {e}")
+    from .api.routes import api
+    app.register_blueprint(api, url_prefix="/api")
 
     app.register_blueprint(main)
     return app
