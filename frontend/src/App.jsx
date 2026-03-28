@@ -38,25 +38,49 @@ function App() {
   })() : null
 
   useEffect(() => {
-    if (!isPlaying) return
+    if (!isPlaying || lapCount < 2) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+      return
+    }
 
     intervalRef.current = setInterval(() => {
       setCurrentLap(prev => {
+        const upperBound = Math.max(0, lapCount - 1)
         const next = prev + 1
-        if (next >= lapCount - 1) {
-          clearInterval(intervalRef.current)
+        if (next >= upperBound) {
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current)
+          }
           setIsPlaying(false)
-          return lapCount - 1
+          return upperBound
         }
         return next
       })
     }, replayInterval)
 
-    return () => clearInterval(intervalRef.current)
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+    }
   }, [isPlaying, lapCount, replayInterval])
 
+  useEffect(() => {
+    if (lapCount <= 0) {
+      setCurrentLap(0)
+      return
+    }
+    setCurrentLap(prev => {
+      if (prev < 0) return 0
+      if (prev >= lapCount) return lapCount - 1
+      return prev
+    })
+  }, [lapCount])
+
   const handlePlayPause = () => {
-    if (!raceData) return
+    if (!raceData || lapCount < 2) return
     setIsPlaying(prev => !prev)
   }
 
