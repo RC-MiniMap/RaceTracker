@@ -20,7 +20,7 @@ function useRaceData(year, round) {
             if (errorData && typeof errorData.error === 'string') {
               errorMessage = errorData.error
             }
-          } catch (e) {
+          } catch {
             // Ignore JSON parse errors and fall back to generic message
           }
           throw new Error(errorMessage)

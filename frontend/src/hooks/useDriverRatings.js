@@ -23,7 +23,7 @@ function useDriverRatings(year, round, lapNumber) {
             if (errorData && typeof errorData.error === 'string') {
               errorMessage = errorData.error
             }
-          } catch (e) {
+          } catch {
             // Ignore JSON parse errors
           }
           throw new Error(errorMessage)

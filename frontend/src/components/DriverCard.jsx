@@ -32,7 +32,7 @@ const CATEGORIES = [
   { key: 'discipline',      label: 'Discipline' },
 ]
 
-function RatingBreakdown({ rating, teamColor }) {
+function RatingBreakdown({ rating }) {
   return (
     <div style={{
       padding: '8px 12px 12px',
@@ -248,7 +248,7 @@ function DriverCard({ position, driver_name, abbreviation, driver_number, team, 
       </div>
 
       {expanded && rating && (
-        <RatingBreakdown rating={rating} teamColor={teamColor} />
+        <RatingBreakdown rating={rating} />
       )}
     </div>
   )
