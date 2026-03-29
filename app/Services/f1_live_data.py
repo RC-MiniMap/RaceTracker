@@ -60,7 +60,7 @@ def get_available_races(year: int) -> List[Dict[str, Any]]:
                     "year": year,
                     "round": int(row.get("RoundNumber", 0)),
                     "name": str(row.get("EventName", "Unknown")),
-                    "date": str(row.get("Date", ""))[:10],  # YYYY-MM-DD format
+                    "date": str(row.get("EventDate", ""))[:10],
                 }
             )
         return races
