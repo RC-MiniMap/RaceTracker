@@ -10,6 +10,7 @@ Usage:
 
 from __future__ import annotations
 
+import copy
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -167,12 +168,14 @@ class RaceAnalyzer:
             )
             return {}
 
-        # Clip driver data to current lap
-        all_drivers = list(self._driver_race_data.values())
-        for driver in all_drivers:
-            driver.laps = [
+        # Create clipped copies of driver data (don't mutate originals)
+        all_drivers = []
+        for driver in self._driver_race_data.values():
+            clipped = copy.copy(driver)
+            clipped.laps = [
                 snap for snap in driver.laps if snap.lap_number <= lap_number
             ]
+            all_drivers.append(clipped)
 
         # Calculate ratings
         try:

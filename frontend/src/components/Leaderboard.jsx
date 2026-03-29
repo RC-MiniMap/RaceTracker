@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import DriverCard from './DriverCard'
 
-function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData, currentLapIndex }) {
+function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData, currentLapIndex, ratings }) {
+  const [expandedDriver, setExpandedDriver] = useState(null)
+
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -22,10 +25,17 @@ function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData,
     positionMap[driver.driver_number] = driver.position
   })
 
+  const handleRatingClick = (abbreviation) => {
+    setExpandedDriver(prev => prev === abbreviation ? null : abbreviation)
+  }
+
   return (
     <div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
         padding: '12px 16px',
         fontSize: '13px',
         fontWeight: 700,
@@ -34,14 +44,23 @@ function Leaderboard({ standings = [], currentLap, totalLaps, loading, raceData,
         color: 'var(--text-muted)',
         borderBottom: '1px solid var(--border)',
       }}>
-        LAP {currentLap} / {totalLaps}
+        <span>LAP {currentLap} / {totalLaps}</span>
+        {ratings && <span style={{ fontSize: '11px', letterSpacing: '1px' }}>RATING</span>}
       </div>
       <div>
         {standings.map(driver => {
           const prevPos = positionMap[driver.driver_number]
           const positionChange = prevPos ? prevPos - driver.position : 0
+          const driverRating = ratings?.[driver.abbreviation] || null
           return (
-            <DriverCard key={driver.driver_number} {...driver} positionChange={positionChange} />
+            <DriverCard
+              key={driver.driver_number}
+              {...driver}
+              positionChange={positionChange}
+              rating={driverRating}
+              expanded={expandedDriver === driver.abbreviation}
+              onRatingClick={handleRatingClick}
+            />
           )
         })}
       </div>
