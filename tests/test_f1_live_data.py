@@ -78,18 +78,36 @@ def test_get_race_lap_data(monkeypatch):
 
     monkeypatch.setattr(fastf1, "get_session", lambda y, r, s: FakeSession())
 
-    # Mock OpenF1 request
-    class FakeResp:
+    # Mock OpenF1 requests (sessions lookup + drivers lookup)
+    class FakeSessionsResp:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return [{"session_key": 9999, "session_name": "Race"}]
+
+    class FakeDriversResp:
         def raise_for_status(self):
             return None
 
         def json(self):
             return [
-                {"abbreviation": "VER", "image": "https://openf1.example/VER.jpg"},
-                {"abbreviation": "HAM", "image": "https://openf1.example/HAM.jpg"},
+                {
+                    "name_acronym": "VER",
+                    "headshot_url": "https://openf1.example/VER.jpg",
+                },
+                {
+                    "name_acronym": "HAM",
+                    "headshot_url": "https://openf1.example/HAM.jpg",
+                },
             ]
 
-    monkeypatch.setattr(requests, "get", lambda url, timeout=10: FakeResp())
+    def fake_get(url, timeout=10):
+        if "sessions" in url:
+            return FakeSessionsResp()
+        return FakeDriversResp()
+
+    monkeypatch.setattr(requests, "get", fake_get)
 
     out = fld.get_race_lap_data(2024, 1)
     assert isinstance(out, dict)

@@ -3,13 +3,8 @@ from flask_cors import CORS
 import os
 
 
-
 def create_app():
-    app = Flask(
-        __name__,
-        template_folder=os.path.join(os.path.dirname(__file__), "templates"),
-        static_folder=os.path.join(os.path.dirname(__file__), "static"),
-    )
+    app = Flask(__name__)
 
     # Enable CORS for Vite dev server
     CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
@@ -19,12 +14,9 @@ def create_app():
         "SECRET_KEY", "dev-secret-key-change-in-production"
     )
 
-    # Import and register blueprints
-    from .dashboard.routes import main
-
-    # Register api blueprint (added below)
+    # Register API blueprint — Flask is purely a JSON API
     from .api.routes import api
+
     app.register_blueprint(api, url_prefix="/api")
 
-    app.register_blueprint(main)
     return app

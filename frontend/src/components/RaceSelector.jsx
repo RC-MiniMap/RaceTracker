@@ -8,12 +8,18 @@ function RaceSelector({ onRaceSelect }) {
 
   useEffect(() => {
     fetch('/api/races')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`Failed to fetch races (${res.status})`)
+        return res.json()
+      })
       .then(data => {
+        if (!Array.isArray(data)) throw new Error('Invalid response format')
+        // Sort by date descending so the most recent past race is first
+        const sorted = [...data].sort((a, b) => (b.date || '').localeCompare(a.date || ''))
         setRaces(data)
         setLoading(false)
-        if (data.length > 0) {
-          const latest = data[data.length - 1]
+        if (sorted.length > 0) {
+          const latest = sorted[0]
           const value = `${latest.year}-${latest.round}`
           setSelectedValue(value)
           onRaceSelect(latest.year, latest.round)

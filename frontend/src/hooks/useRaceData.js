@@ -17,8 +17,8 @@ function useRaceData(year, round) {
           let errorMessage = `Request failed with status ${res.status}`
           try {
             const errorData = await res.json()
-            if (errorData && typeof errorData.message === 'string') {
-              errorMessage = errorData.message
+            if (errorData && typeof errorData.error === 'string') {
+              errorMessage = errorData.error
             }
           } catch (e) {
             // Ignore JSON parse errors and fall back to generic message

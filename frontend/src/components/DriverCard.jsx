@@ -172,6 +172,29 @@ function DriverCard({ position, driver_name, abbreviation, driver_number, team, 
           margin: '0 10px',
         }} />
 
+        {headshot_url ? (
+          <img
+            src={headshot_url}
+            alt={abbreviation}
+            style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              marginRight: '6px',
+              background: 'rgba(255,255,255,0.08)',
+            }}
+          />
+        ) : (
+          <div style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.08)',
+            marginRight: '6px',
+          }} />
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', flex: 1, gap: '6px' }}>
           <span style={{ fontWeight: 700, fontSize: '15px', letterSpacing: '0.5px', color: 'var(--text-bright)', width: '40px' }}>
             {abbreviation}

@@ -21,7 +21,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [replayInterval, setReplayInterval] = useState(5000)
   const intervalRef = useRef(null)
-  const { raceData, loading } = useRaceData(selectedYear, selectedRound)
+  const { raceData, loading, error: raceError } = useRaceData(selectedYear, selectedRound)
 
   const handleRaceSelect = (year, round) => {
     setSelectedYear(year)
@@ -37,7 +37,7 @@ function App() {
   const lapNumber = currentLapData?.lap_number ?? currentLap + 1
 
   // Fetch driver ratings for the current lap
-  const { ratings } = useDriverRatings(selectedYear, selectedRound, lapNumber)
+  const { ratings, error: ratingsError } = useDriverRatings(selectedYear, selectedRound, lapNumber)
 
   const avgLapTimeMs = raceData ? (() => {
     const times = raceData.laps.flatMap(lap =>
@@ -120,6 +120,16 @@ function App() {
       </header>
 
       <div className="leaderboardContainer">
+        {raceError && (
+          <div style={{ padding: '16px', color: '#ef4444', fontSize: '13px' }}>
+            Failed to load race data: {raceError}
+          </div>
+        )}
+        {ratingsError && (
+          <div style={{ padding: '8px 16px', color: '#fb923c', fontSize: '12px' }}>
+            Ratings unavailable: {ratingsError}
+          </div>
+        )}
         <Leaderboard
           standings={standings}
           currentLap={lapNumber}
